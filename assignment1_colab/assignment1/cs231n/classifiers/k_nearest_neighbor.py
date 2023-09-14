@@ -21,8 +21,12 @@ class KNearestNeighbor(object):
         - y: A numpy array of shape (N,) containing the training labels, where
              y[i] is the label for X[i].
         """
+        print(print(X.shape))
+        # exit()
         self.X_train = X
         self.y_train = y
+
+    # exit()
 
     def predict(self, X, k=1, num_loops=0):
         """
@@ -69,7 +73,8 @@ class KNearestNeighbor(object):
         dists = np.zeros((num_test, num_train))
         for i in range(num_test):
             for j in range(num_train):
-                dists[i, j] = np.sqrt(np.sum(np.power(self.X_train[j] - self.X[i], 2)))
+                dists[i, j] = np.linalg.norm(self.X_train[j] - X[i])
+                # dists[i, j] = np.sqrt(np.sum(np.power(self.X_train[j] - X[i], 2)))
                 #####################################################################
                 # TODO:                                                             #
                 # Compute the l2 distance between the ith test point and the jth    #
@@ -119,7 +124,7 @@ class KNearestNeighbor(object):
         num_train = self.X_train.shape[0]
         dists = np.zeros((num_test, num_train))
         dists = np.sqrt(
-            -2 * (X @ self.X_train.T)
+            -2 * X.dot(self.X_train.T)
             + np.power(X, 2).sum(axis=1, keepdims=True)
             + np.power(self.X_train, 2).sum(axis=1, keepdims=True).T
         )
@@ -184,8 +189,8 @@ class KNearestNeighbor(object):
             #########################################################################
             # *****START OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
 
-            pass
-            np.argmax(np.bincount(closest_y))
+            # pass
+            y_pred[i] = np.argmax(np.bincount(closest_y))
 
             # *****END OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
 
