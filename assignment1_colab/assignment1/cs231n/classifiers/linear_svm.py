@@ -11,7 +11,7 @@ def svm_loss_naive(W, X, y, reg):
     Inputs have dimension D, there are C classes, and we operate on minibatches
     of N examples.
 
-    Inputs:
+    Inputs:np.hstack(3, 4, 1)? pleaae explain in detail?
     - W: A numpy array of shape (D, C) containing weights.
     - X: A numpy array of shape (N, D) containing a minibatch of data.
     - y: A numpy array of shape (N,) containing training labels; y[i] = c means
@@ -37,6 +37,8 @@ def svm_loss_naive(W, X, y, reg):
             margin = scores[j] - correct_class_score + 1  # note delta = 1
             if margin > 0:
                 loss += margin
+                dW[:, y[i]] = dW[:, y[i]] - X[i]
+                dW[:, j] = dW[:, j] + X[i]
 
     # Right now the loss is a sum over all training examples, but we want it
     # to be an average instead so we divide by num_train.
@@ -44,6 +46,7 @@ def svm_loss_naive(W, X, y, reg):
 
     # Add regularization to the loss.
     loss += reg * np.sum(W * W)
+    dW = dW + reg * 2 * W
 
     #############################################################################
     # TODO:                                                                     #
@@ -55,7 +58,7 @@ def svm_loss_naive(W, X, y, reg):
     #############################################################################
     # *****START OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
 
-    pass
+    # pass
 
     # *****END OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
 
