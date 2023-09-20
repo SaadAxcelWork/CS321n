@@ -46,7 +46,8 @@ def svm_loss_naive(W, X, y, reg):
 
     # Add regularization to the loss.
     loss += reg * np.sum(W * W)
-    dW = dW + reg * 2 * W
+    dW /= num_train  # scale gradient ovr the number of samples
+    dW += reg * 2 * W  # Add regularization to the gradient.
 
     #############################################################################
     # TODO:                                                                     #
@@ -80,8 +81,24 @@ def svm_loss_vectorized(W, X, y, reg):
     # result in loss.                                                           #
     #############################################################################
     # *****START OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
+    # print(type(X))
+    # exit()
+    scores = X.dot(W)
 
-    pass
+    correct_class_score = scores[np.arange(len(scores)), y]
+
+    scores_check_margin = scores - correct_class_score.reshape(-1, 1) + 1
+    scores_check_margin[np.arange(len(scores_check_margin)), y] = 0
+
+    num_meet_margin = -np.sum(scores_check_margin > 0, axis=1)
+
+    scores_check_margin[scores_check_margin < 0] = 0
+
+    loss = scores_check_margin.sum()
+    loss /= X.shape[0]
+    loss += reg * np.sum(W * W)
+
+    # pass
 
     # *****END OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
 
@@ -95,8 +112,16 @@ def svm_loss_vectorized(W, X, y, reg):
     # loss.                                                                     #
     #############################################################################
     # *****START OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
+    scores_check_margin[scores_check_margin > 0] = 1
 
-    pass
+    scores_check_margin[np.arange(len(scores_check_margin)), y] = num_meet_margin
+
+    dW = X.T.dot(scores_check_margin)
+
+    dW /= X.shape[0]
+    dW += reg * 2 * W  # Derivate of L2 norm
+
+    # pass
 
     # *****END OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
 

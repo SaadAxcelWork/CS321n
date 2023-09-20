@@ -39,6 +39,8 @@ class LinearClassifier(object):
         Outputs:
         A list containing the value of the loss function at each training iteration.
         """
+        # print(type(X))
+        # exit()
         num_train, dim = X.shape
         num_classes = (
             np.max(y) + 1
@@ -65,8 +67,11 @@ class LinearClassifier(object):
             # replacement is faster than sampling without replacement.              #
             #########################################################################
             # *****START OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
+            indices = np.random.choice(num_train, batch_size)
+            X_batch = X[indices]
+            y_batch = y[indices]
 
-            pass
+            # pass
 
             # *****END OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
 
@@ -80,8 +85,8 @@ class LinearClassifier(object):
             # Update the weights using the gradient and the learning rate.          #
             #########################################################################
             # *****START OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
-
-            pass
+            self.W -= learning_rate * grad
+            # pass
 
             # *****END OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
 
@@ -89,6 +94,8 @@ class LinearClassifier(object):
                 print("iteration %d / %d: loss %f" % (it, num_iters, loss))
 
         return loss_history
+
+    # exit()
 
     def predict(self, X):
         """
@@ -110,8 +117,8 @@ class LinearClassifier(object):
         # Implement this method. Store the predicted labels in y_pred.            #
         ###########################################################################
         # *****START OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
-
-        pass
+        y_pred = np.argmax(X @ self.W, axis=1)
+        # pass
 
         # *****END OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
         return y_pred
@@ -135,14 +142,14 @@ class LinearClassifier(object):
 
 
 class LinearSVM(LinearClassifier):
-    """ A subclass that uses the Multiclass SVM loss function """
+    """A subclass that uses the Multiclass SVM loss function"""
 
     def loss(self, X_batch, y_batch, reg):
         return svm_loss_vectorized(self.W, X_batch, y_batch, reg)
 
 
 class Softmax(LinearClassifier):
-    """ A subclass that uses the Softmax + Cross-entropy loss function """
+    """A subclass that uses the Softmax + Cross-entropy loss function"""
 
     def loss(self, X_batch, y_batch, reg):
         return softmax_loss_vectorized(self.W, X_batch, y_batch, reg)
