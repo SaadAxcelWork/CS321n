@@ -33,8 +33,19 @@ def softmax_loss_naive(W, X, y, reg):
     # regularization!                                                           #
     #############################################################################
     # *****START OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
+    N = X.shape[0]
+    for i in range(N):
+        z = X[i] @ W  # z score vector
+        exp_z = np.exp(z - z.max())  # numerical stable exponent z score
+        softmax = exp_z / exp_z.sum()  # softmax of each score
+        loss -= np.log(softmax[y[i]])  # add cross entropy
+        softmax[y[i]] -= 1  # update for gradient
+        dW += np.outer(X[i], softmax)  # final gradient
 
-    pass
+    loss = loss / N + reg * np.sum(W**2)  # average loss and regularization
+    dW = dW / N + 2 * reg * W  # add regulairation in with gradients
+
+    # pass
 
     # *****END OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
 
@@ -58,8 +69,18 @@ def softmax_loss_vectorized(W, X, y, reg):
     # regularization!                                                           #
     #############################################################################
     # *****START OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
+    N = X.shape[0]  # number of samples
+    z = X @ W  # z_score of vectore
+    exp_z = np.exp(z - z.sum())  # numerical stable exponent z score
+    exp_z /= exp_z.sum(axis=1, keepdims=True)  # row wise softmax probability
 
-    pass
+    loss = -np.log(exp_z[range(N), y]).sum()  # add cross entropy with loss
+    loss /= N + reg * np.sum(W**2)  # average loss and add regularizarition
+
+    exp_z[range(N), y] -= 1  # update probobilty for gradient
+    dW = X.T @ exp_z / N + 2 * reg * W  # calculate gradient
+
+    # pass
 
     # *****END OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
 
