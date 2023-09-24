@@ -53,8 +53,8 @@ def get_CIFAR10_data(
     condensed to a single function.
     """
     # Load the raw CIFAR-10 data
-    cifar10_dir = os.path.join(
-        os.path.dirname(__file__), "datasets/cifar-10-batches-py"
+    cifar10_dir = str(
+        "/home/saad-alam/Documents/AxcelerateAI_workspace/cs321n/cifar-10-batches-py"
     )
     X_train, y_train, X_test, y_test = load_CIFAR10(cifar10_dir)
 
