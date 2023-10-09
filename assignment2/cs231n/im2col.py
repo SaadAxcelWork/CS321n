@@ -50,9 +50,3 @@ def col2im_indices(cols, x_shape, field_height=3, field_width=3, padding=1, stri
         return x_padded
     return x_padded[:, :, padding:-padding, padding:-padding]
 
-
-# *****START OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
-
-pass
-
-# *****END OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
